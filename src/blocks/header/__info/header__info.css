@@ -1,0 +1,12 @@
+.header__info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    overflow: hidden;
+}
+
+@media screen and (max-width: 767px) {
+    .header__info {
+        margin: 0 30px 33px 0;
+    }
+}

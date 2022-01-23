@@ -1,0 +1,10 @@
+.login__link {
+    margin: -57px 0 0 0;
+    text-align: center;
+}
+
+@media screen and (max-width: 767px) {
+    .login__link {
+        margin: -17px 0 0 0;
+    }
+}

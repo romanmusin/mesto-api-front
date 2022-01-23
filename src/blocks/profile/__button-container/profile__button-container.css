@@ -1,0 +1,15 @@
+.profile__button-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0 0 16px 0;
+}
+
+@media screen and (max-width: 1023px) {
+    .profile__button-container {
+        margin: 0;
+        margin-bottom: 14px;
+        width: 100%;
+        justify-content: center;
+    }
+}

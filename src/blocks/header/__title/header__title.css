@@ -1,0 +1,21 @@
+.header__title {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 22px;
+  text-decoration: none;
+  text-align: center;
+  color: #ffffff;
+}
+
+.header__title:hover {
+  opacity: 0.6;
+}
+
+@media screen and (max-width: 767px) {
+  .header__title {
+    font-size: 14px;
+    line-height: 17px;
+  }
+}

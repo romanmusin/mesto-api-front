@@ -1,0 +1,29 @@
+.input-error {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 15px;
+    color: #FF0000;
+    height: 12px;
+    margin: 0;
+    position: absolute;
+    top: 143px;
+    left: 36px;
+    opacity: 1;
+    z-index: 1;
+}
+
+.input-error:nth-of-type(2) {
+    top: 200px;
+}
+
+@media screen and (max-width: 767px) {
+    .input-error {
+        top: 140px;
+        left: 22px;
+    }
+
+    .input-error:last-of-type {
+        top: 205px;
+    }
+}

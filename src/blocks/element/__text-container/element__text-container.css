@@ -1,0 +1,9 @@
+.element__text-container {
+    display: flex;
+    max-height: 30px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px 15px 31px 21px;
+    box-sizing: border-box;
+}

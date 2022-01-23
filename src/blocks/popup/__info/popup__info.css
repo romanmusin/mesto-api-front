@@ -1,0 +1,20 @@
+@import url('./_text/popup__info_text.css');
+@import url('./_image/popup__info_image.css');
+@import url('./_close/popup__info_close.css');
+
+.popup__info {
+    width: 430px;
+    height: 330px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+@media screen and (max-width: 767px) {
+    .popup__info {
+        width: 280px;
+        height: 308px;
+        margin-top: 130px;
+    }
+}

@@ -1,0 +1,31 @@
+.profile__avatar-container {
+    margin: 0;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+}
+
+.profile__avatar-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 120px;
+    height: 120px;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.8);
+    background-image: url('../../../images/pen.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 26px 26px;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .4s, visibility .4s linear;
+  }
+
+  .profile__avatar-container:hover::after {
+    visibility: visible;
+    opacity: 1;
+  }
