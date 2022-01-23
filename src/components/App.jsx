@@ -62,11 +62,11 @@ const App = () => {
   React.useEffect(() => {
     if (isLoggedIn) {
       Promise.all([api.getUserInfo(), api.getCardsInfo()])
-      .then(([userInfo, loadCards]) => {
-        setCurrentUser(userInfo);
-        setCards(loadCards);
-      })
-      .catch((err) => console.log(err));
+        .then(([userInfo, loadCards]) => {
+          setCurrentUser(userInfo);
+          setCards(loadCards);
+        })
+        .catch((err) => console.log(err));
     }
   }, [isLoggedIn]);
 
@@ -177,11 +177,14 @@ const App = () => {
     }
   }
 
-  React.useEffect(() => {
-    if (localStorage.getItem("jwt")) {
-      history.push("/");
-    }
-  }, [history]);
+  React.useEffect(
+    (res) => {
+      if (localStorage.getItem("jwt")) {
+        history.push("/");
+      }
+    },
+    [history]
+  );
 
   const handleRegister = ({ password, email }) => {
     auth
@@ -206,7 +209,7 @@ const App = () => {
         setIsInfoTooltipOpen(true);
       });
   };
-
+  /*
   const handleLogin = ({ password, email }) => {
     auth
       .login(password, email)
@@ -214,6 +217,27 @@ const App = () => {
         if (dataLog.token || dataLog.statusCode === 200) {
           setIsLoggedIn(true);
           localStorage.setItem("jwt", dataLog.token);
+          history.push("/");
+          setUserEmail(email);
+        }
+      })
+      .catch((err) => {
+        setIsInfoTooltipOpen(true);
+        setMessage({
+          image: failedReg,
+          text: "Что-то пошло не так! Попробуйте ещё раз.",
+        });
+      });
+  };
+*/
+  const handleLogin = ({ password, email }) => {
+    auth
+      .login(password, email)
+      .then((res) => {
+        console.log(res.message);
+        if (res.message === "Вход совершен успешно") {
+          setIsLoggedIn(true);
+          // localStorage.setItem("jwt", res.cookie.token);
           history.push("/");
           setUserEmail(email);
         }

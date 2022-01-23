@@ -1,9 +1,9 @@
 import { baseUrl } from './auth'
 
 class Api {
-  constructor(config) {
-    this._url = config.url;
-    this._headers = config.headers;
+  constructor({ url, headers }) {
+    this._url = url;
+    this._headers = headers;
   }
 
   _getResponse(res) {
@@ -14,21 +14,21 @@ class Api {
   }
 
   getUserInfo() {
-    return fetch(`${this._url}/users/me`, {
+    return fetch(`${baseUrl}/users/me`, {
       method: "GET",
       headers: this._headers,
     }).then(this._getResponse);
   }
 
   getCardsInfo() {
-    return fetch(`${this._url}/cards`, {
+    return fetch(`${baseUrl}/cards`, {
       method: "GET",
       headers: this._headers,
     }).then(this._getResponse);
   }
 
   addCard({ name, link }) {
-    return fetch(`${this._url}/cards`, {
+    return fetch(`${baseUrl}/cards`, {
       method: "POST",
       headers: this._headers,
       body: JSON.stringify({
@@ -39,7 +39,7 @@ class Api {
   }
 
   setUserInfo(data) {
-    return fetch(`${this._url}/users/me`, {
+    return fetch(`${baseUrl}/users/me`, {
       method: "PATCH",
       headers: this._headers,
       body: JSON.stringify({
@@ -50,7 +50,7 @@ class Api {
   }
 
   editAvatar(data) {
-    return fetch(`${this._url}/users/me/avatar`, {
+    return fetch(`${baseUrl}/users/me/avatar`, {
       method: "PATCH",
       headers: this._headers,
       body: JSON.stringify({
@@ -60,14 +60,14 @@ class Api {
   }
 
   deleteCard(cardId) {
-    return fetch(`${this._url}/cards/${cardId}`, {
+    return fetch(`${baseUrl}/cards/${cardId}`, {
       method: "DELETE",
       headers: this._headers,
     }).then(this._getResponse);
   }
 
   toggleLike(id, isLiked) {
-    return fetch(`${this._url}/cards/likes/${id}`, {
+    return fetch(`${baseUrl}/cards/likes/${id}`, {
       method: isLiked ? "PUT" : "DELETE",
       headers: this._headers,
     }).then(this._getResponse);
@@ -77,8 +77,8 @@ class Api {
 const api = new Api({
   url: baseUrl,
   headers: {
-    "Content-Type": "application/json",
-  },
+    'Content-Type': 'application/json'
+  }
 });
 
 export default api;
