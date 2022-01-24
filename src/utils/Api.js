@@ -1,9 +1,9 @@
 import { baseUrl } from './auth'
 
 class Api {
-  constructor({ url, headers }) {
-    this._url = url;
-    this._headers = headers;
+  constructor(config) {
+    this._url = config.url;
+    this._headers = config.headers;
   }
 
   _getResponse(res) {
@@ -14,22 +14,25 @@ class Api {
   }
 
   getUserInfo() {
-    return fetch(`${baseUrl}/users/me`, {
+    return fetch(`${this._url}/users/me`, {
       method: "GET",
+      credentials: 'include',
       headers: this._headers,
     }).then(this._getResponse);
   }
 
   getCardsInfo() {
-    return fetch(`${baseUrl}/cards`, {
+    return fetch(`${this._url}/cards`, {
       method: "GET",
+      credentials: 'include',
       headers: this._headers,
     }).then(this._getResponse);
   }
 
   addCard({ name, link }) {
-    return fetch(`${baseUrl}/cards`, {
+    return fetch(`${this._url}/cards`, {
       method: "POST",
+      credentials: 'include',
       headers: this._headers,
       body: JSON.stringify({
         name: name,
@@ -39,8 +42,9 @@ class Api {
   }
 
   setUserInfo(data) {
-    return fetch(`${baseUrl}/users/me`, {
+    return fetch(`${this._url}/users/me`, {
       method: "PATCH",
+      credentials: 'include',
       headers: this._headers,
       body: JSON.stringify({
         name: data.name,
@@ -50,8 +54,9 @@ class Api {
   }
 
   editAvatar(data) {
-    return fetch(`${baseUrl}/users/me/avatar`, {
+    return fetch(`${this._url}/users/me/avatar`, {
       method: "PATCH",
+      credentials: 'include',
       headers: this._headers,
       body: JSON.stringify({
         avatar: data.avatar,
@@ -60,15 +65,17 @@ class Api {
   }
 
   deleteCard(cardId) {
-    return fetch(`${baseUrl}/cards/${cardId}`, {
+    return fetch(`${this._url}/cards/${cardId}`, {
       method: "DELETE",
+      credentials: 'include',
       headers: this._headers,
     }).then(this._getResponse);
   }
 
   toggleLike(id, isLiked) {
-    return fetch(`${baseUrl}/cards/likes/${id}`, {
+    return fetch(`${this._url}/cards/likes/${id}`, {
       method: isLiked ? "PUT" : "DELETE",
+      credentials: 'include',
       headers: this._headers,
     }).then(this._getResponse);
   }

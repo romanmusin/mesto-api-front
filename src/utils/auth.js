@@ -3,6 +3,7 @@ export const baseUrl = process.env.NODE_ENV === 'production' ? 'https://api.romu
 export function register(password, email) {
   return fetch(`${baseUrl}/signup`, {
     method: "POST",
+    withCredentials: true,
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
@@ -17,6 +18,7 @@ export function register(password, email) {
 export function login(password, email) {
   return fetch(`${baseUrl}/signin`, {
     method: "POST",
+    withCredentials: true,
     headers: {
       "Content-Type": "application/json",
     },
@@ -27,6 +29,7 @@ export function login(password, email) {
 export function checkToken(token) {
   return fetch(`${baseUrl}/users/me`, {
     method: "GET",
+    withCredentials: true,
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",

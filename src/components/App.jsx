@@ -162,10 +162,11 @@ const App = () => {
   }, []);
 
   function checkToken() {
-    const jwt = localStorage.getItem("jwt");
-    if (jwt) {
+    //const jwt = localStorage.getItem("jwt");
+    if (document.cookie.includes('jwt=')) {
+      console.log(document.cookie)
       auth
-        .checkToken(jwt)
+        .checkToken()
         .then((res) => {
           setUserEmail(res.data.email);
           setIsLoggedIn(true);
@@ -176,10 +177,9 @@ const App = () => {
         });
     }
   }
-
-  React.useEffect(
-    (res) => {
-      if (localStorage.getItem("jwt")) {
+  
+  React.useEffect(() => {
+      if (document.cookie.includes('jwt=')) {
         history.push("/");
       }
     },
@@ -236,8 +236,8 @@ const App = () => {
       .then((res) => {
         console.log(res.message);
         if (res.message === "Вход совершен успешно") {
+          checkToken()
           setIsLoggedIn(true);
-          // localStorage.setItem("jwt", res.cookie.token);
           history.push("/");
           setUserEmail(email);
         }
@@ -250,6 +250,36 @@ const App = () => {
         });
       });
   };
+
+/*
+  const checkToken = () => {
+    auth
+      .checkToken()
+      .then((res) => {
+        authorization(res.data._id, res.data.email)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  const authorization = (email) => {
+    setIsLoggedIn(true)
+    setUserEmail(email);
+  }
+
+  React.useEffect(() => {
+    isLoggedIn ? history.push('/') : history.push('/sign-in')
+  }, [isLoggedIn])
+
+
+  React.useEffect(() => {
+    if (document.cookie.includes('jwt=')) {
+      checkToken();
+    }
+  }, [])
+
+  */
 
   const onSignOut = () => {
     localStorage.removeItem("jwt");
