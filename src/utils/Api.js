@@ -1,4 +1,3 @@
-import { baseUrl } from './auth'
 
 class Api {
   constructor(config) {
@@ -16,7 +15,7 @@ class Api {
   getUserInfo() {
     return fetch(`${this._url}/users/me`, {
       method: "GET",
-      credentials: 'include',
+      credentials: "include",
       headers: this._headers,
     }).then(this._getResponse);
   }
@@ -24,7 +23,7 @@ class Api {
   getCardsInfo() {
     return fetch(`${this._url}/cards`, {
       method: "GET",
-      credentials: 'include',
+      credentials: "include",
       headers: this._headers,
     }).then(this._getResponse);
   }
@@ -32,7 +31,7 @@ class Api {
   addCard({ name, link }) {
     return fetch(`${this._url}/cards`, {
       method: "POST",
-      credentials: 'include',
+      credentials: "include",
       headers: this._headers,
       body: JSON.stringify({
         name: name,
@@ -44,7 +43,7 @@ class Api {
   setUserInfo(data) {
     return fetch(`${this._url}/users/me`, {
       method: "PATCH",
-      credentials: 'include',
+      credentials: "include",
       headers: this._headers,
       body: JSON.stringify({
         name: data.name,
@@ -56,7 +55,7 @@ class Api {
   editAvatar(data) {
     return fetch(`${this._url}/users/me/avatar`, {
       method: "PATCH",
-      credentials: 'include',
+      credentials: "include",
       headers: this._headers,
       body: JSON.stringify({
         avatar: data.avatar,
@@ -67,7 +66,7 @@ class Api {
   deleteCard(cardId) {
     return fetch(`${this._url}/cards/${cardId}`, {
       method: "DELETE",
-      credentials: 'include',
+      credentials: "include",
       headers: this._headers,
     }).then(this._getResponse);
   }
@@ -75,17 +74,20 @@ class Api {
   toggleLike(id, isLiked) {
     return fetch(`${this._url}/cards/likes/${id}`, {
       method: isLiked ? "PUT" : "DELETE",
-      credentials: 'include',
+      credentials: "include",
       headers: this._headers,
     }).then(this._getResponse);
   }
 }
 
 const api = new Api({
-  url: baseUrl,
+  url: process.env.NODE_ENV === "production"
+  ? "https://api.romus.mesto.nomoredomains.work"
+  : "http://localhost:3000",
   headers: {
-    'Content-Type': 'application/json'
-  }
+    Authorization: `Bearer ${document.cookie.search('jwt').value}` ,
+    "Content-Type": "application/json",
+  },
 });
 
 export default api;

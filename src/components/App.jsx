@@ -16,7 +16,7 @@ import successReg from "../images/successReg.svg";
 import failedReg from "../images/failedReg.svg";
 import InfoTooltip from "./InfoTooltip";
 import ProtectedRoute from "./ProtectedRoute";
-import * as auth from "../utils/auth.js";
+import auth from "../utils/auth.js";
 
 const App = () => {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
@@ -162,11 +162,11 @@ const App = () => {
   }, []);
 
   function checkToken() {
-    //const jwt = localStorage.getItem("jwt");
-    if (document.cookie.includes('jwt=')) {
-      console.log(document.cookie)
+    const jwt = document.cookie.valueOf("jwt");
+    if (jwt) {
+      console.log(jwt)
       auth
-        .checkToken()
+        .checkToken(jwt)
         .then((res) => {
           setUserEmail(res.data.email);
           setIsLoggedIn(true);
@@ -179,7 +179,7 @@ const App = () => {
   }
   
   React.useEffect(() => {
-      if (document.cookie.includes('jwt=')) {
+      if (document.cookie.includes("jwt")) {
         history.push("/");
       }
     },
@@ -209,34 +209,13 @@ const App = () => {
         setIsInfoTooltipOpen(true);
       });
   };
-  /*
-  const handleLogin = ({ password, email }) => {
-    auth
-      .login(password, email)
-      .then((dataLog) => {
-        if (dataLog.token || dataLog.statusCode === 200) {
-          setIsLoggedIn(true);
-          localStorage.setItem("jwt", dataLog.token);
-          history.push("/");
-          setUserEmail(email);
-        }
-      })
-      .catch((err) => {
-        setIsInfoTooltipOpen(true);
-        setMessage({
-          image: failedReg,
-          text: "Что-то пошло не так! Попробуйте ещё раз.",
-        });
-      });
-  };
-*/
+  
   const handleLogin = ({ password, email }) => {
     auth
       .login(password, email)
       .then((res) => {
         console.log(res.message);
         if (res.message === "Вход совершен успешно") {
-          checkToken()
           setIsLoggedIn(true);
           history.push("/");
           setUserEmail(email);
@@ -251,38 +230,7 @@ const App = () => {
       });
   };
 
-/*
-  const checkToken = () => {
-    auth
-      .checkToken()
-      .then((res) => {
-        authorization(res.data._id, res.data.email)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
-
-  const authorization = (email) => {
-    setIsLoggedIn(true)
-    setUserEmail(email);
-  }
-
-  React.useEffect(() => {
-    isLoggedIn ? history.push('/') : history.push('/sign-in')
-  }, [isLoggedIn])
-
-
-  React.useEffect(() => {
-    if (document.cookie.includes('jwt=')) {
-      checkToken();
-    }
-  }, [])
-
-  */
-
   const onSignOut = () => {
-    localStorage.removeItem("jwt");
     setIsLoggedIn(false);
     history.push("/signin");
   };
