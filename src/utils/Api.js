@@ -71,8 +71,8 @@ class Api {
     }).then(this._getResponse);
   }
 
-  toggleLike(id, isLiked) {
-    return fetch(`${this._url}/cards/likes/${id}`, {
+  toggleLike(cardId, isLiked) {
+    return fetch(`${this._url}/cards/${cardId}/likes`, {
       method: isLiked ? "PUT" : "DELETE",
       credentials: "include",
       headers: this._headers,

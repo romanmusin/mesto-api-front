@@ -27,7 +27,7 @@ const App = () => {
   const [isDeleteCardPopupOpen, setIsDeleteCardPopupOpen] =
     React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(null);
-  const [selectedCardDelete, setSelectedCardDelete] = React.useState(null);
+  const [selectedCardDelete, setSelectedCardDelete] = React.useState({});
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
@@ -40,13 +40,13 @@ const App = () => {
   const handleAddPlaceClick = () => setIsAddPlacePopupOpen(true);
   const handleEditAvatarClick = () => setIsEditAvatarPopupOpen(true);
 
-  function handleClickDeleteCard(item) {
+  function handleClickDeleteCard(card) {
     setIsDeleteCardPopupOpen(true);
-    setSelectedCardDelete(item);
+    setSelectedCardDelete(card);
   }
 
-  function handleCardClick(item) {
-    setSelectedCard(item);
+  function handleCardClick(card) {
+    setSelectedCard(card);
   }
 
   const closeAllPopups = () => {
@@ -63,24 +63,24 @@ const App = () => {
     if (isLoggedIn) {
       Promise.all([api.getUserInfo(), api.getCardsInfo()])
         .then(([userInfo, loadCards]) => {
-          setCurrentUser(userInfo);
-          setCards(loadCards);
+          setCurrentUser(userInfo.data);
+          setCards(loadCards.data);
         })
         .catch((err) => console.log(err));
     }
   }, [isLoggedIn]);
-
+  
   React.useEffect(() => {
     checkToken();
   });
 
   //Удаление Карточки
-  function handleDeleteCard(card) {
+  function handleDeleteCard() {
     api
-      .deleteCard(card._id)
-      .then(() => {
+      .deleteCard(selectedCardDelete._id)
+      .then((res) => {
         setCards((cards) =>
-          cards.filter((cardElements) => cardElements._id !== card._id)
+          cards.filter((cardElements) => cardElements._id !== selectedCardDelete._id)
         );
         closeAllPopups();
       })
@@ -90,7 +90,7 @@ const App = () => {
   //Лайк Карточки
   function handleCardLike(card) {
     const isLiked = card.likes.some(
-      (userLiked) => userLiked._id === currentUser._id
+      (userId) => userId === currentUser._id
     );
 
     api
@@ -98,7 +98,7 @@ const App = () => {
       .then((newCard) => {
         setCards((cards) =>
           cards.map((cardElements) =>
-            cardElements._id === card._id ? newCard : cardElements
+            cardElements._id === card._id ? newCard.data : cardElements
           )
         );
       })
@@ -110,7 +110,7 @@ const App = () => {
     api
       .setUserInfo(data)
       .then((userInfo) => {
-        setCurrentUser(userInfo);
+        setCurrentUser(userInfo.data);
         closeAllPopups();
       })
       .catch((err) => console.log(err));
@@ -121,7 +121,7 @@ const App = () => {
     api
       .addCard(item)
       .then((newCard) => {
-        setCards([newCard, ...cards]);
+        setCards([newCard.data, ...cards]);
         closeAllPopups();
       })
       .catch((err) => console.log(err));
@@ -164,7 +164,7 @@ const App = () => {
   function checkToken() {
     const jwt = document.cookie.valueOf("jwt");
     if (jwt) {
-      console.log(jwt)
+      console.log(jwt);
       auth
         .checkToken(jwt)
         .then((res) => {
@@ -177,14 +177,6 @@ const App = () => {
         });
     }
   }
-  
-  React.useEffect(() => {
-      if (document.cookie.includes("jwt")) {
-        history.push("/");
-      }
-    },
-    [history]
-  );
 
   const handleRegister = ({ password, email }) => {
     auth
@@ -209,7 +201,7 @@ const App = () => {
         setIsInfoTooltipOpen(true);
       });
   };
-  
+
   const handleLogin = ({ password, email }) => {
     auth
       .login(password, email)
@@ -217,6 +209,7 @@ const App = () => {
         console.log(res.message);
         if (res.message === "Вход совершен успешно") {
           setIsLoggedIn(true);
+          //checkToken();
           history.push("/");
           setUserEmail(email);
         }
@@ -230,7 +223,18 @@ const App = () => {
       });
   };
 
-  const onSignOut = () => {
+  React.useEffect(() => {
+    if (document.cookie.includes("jwt")) {
+      history.push("/");
+    }
+  }, [history]);
+
+  React.useEffect(() => {
+    checkToken();
+  });
+
+  const onSignOut = (res) => {
+    //res.clearCookie("jwt")
     setIsLoggedIn(false);
     history.push("/signin");
   };
