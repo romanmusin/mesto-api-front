@@ -1,10 +1,10 @@
 import React from "react";
 import PopupWithForm from "./PopupWithForm";
 
-function DeleteCardPopup(props) {
+function DeleteCardPopup({ isOpen, onClose, onDeleteCard, closePopupClickOverlay }) {
   function handleSubmit(evt) {
     evt.preventDefault();
-    props.onDeleteCard(props.deleteCard);
+    onDeleteCard();
   }
 
   return (
@@ -12,10 +12,10 @@ function DeleteCardPopup(props) {
       name="delete-card"
       title="Вы уверены?"
       buttonText="Да"
-      closePopupClickOverlay={props.closePopupClickOverlay}
+      closePopupClickOverlay={closePopupClickOverlay}
       onSubmit={handleSubmit}
-      isOpen={props.isOpen}
-      onClose={props.onClose}
+      isOpen={isOpen}
+      onClose={onClose}
     />
   );
 }

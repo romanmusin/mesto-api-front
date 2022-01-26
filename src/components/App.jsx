@@ -69,10 +69,6 @@ const App = () => {
         .catch((err) => console.log(err));
     }
   }, [isLoggedIn]);
-  
-  React.useEffect(() => {
-    checkToken();
-  });
 
   //Удаление Карточки
   function handleDeleteCard() {
@@ -89,9 +85,7 @@ const App = () => {
 
   //Лайк Карточки
   function handleCardLike(card) {
-    const isLiked = card.likes.some(
-      (userId) => userId === currentUser._id
-    );
+    const isLiked = card.likes.some((userId) => userId === currentUser._id);
 
     api
       .toggleLike(card._id, !isLiked)
@@ -162,20 +156,15 @@ const App = () => {
   }, []);
 
   function checkToken() {
-    const jwt = document.cookie.valueOf("jwt");
-    if (jwt) {
-      console.log(jwt);
-      auth
-        .checkToken(jwt)
-        .then((res) => {
-          setUserEmail(res.data.email);
-          setIsLoggedIn(true);
-          history.push("/");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+    auth
+      .checkToken()
+      .then((res) => {
+        setUserEmail(res.data.email);
+        setIsLoggedIn(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   const handleRegister = ({ password, email }) => {
@@ -209,7 +198,7 @@ const App = () => {
         console.log(res.message);
         if (res.message === "Вход совершен успешно") {
           setIsLoggedIn(true);
-          //checkToken();
+          checkToken();
           history.push("/");
           setUserEmail(email);
         }
@@ -224,19 +213,26 @@ const App = () => {
   };
 
   React.useEffect(() => {
-    if (document.cookie.includes("jwt")) {
-      history.push("/");
-    }
-  }, [history]);
+    isLoggedIn ? history.push('/') : history.push('/signin')
+  }, [isLoggedIn])
 
   React.useEffect(() => {
-    checkToken();
-  });
+    if (document.cookie.includes("jwt")) {
+      checkToken()
+    }
+  }, []);
 
-  const onSignOut = (res) => {
-    //res.clearCookie("jwt")
-    setIsLoggedIn(false);
-    history.push("/signin");
+  /*
+  React.useEffect(() => {
+    checkToken();
+  }, []);
+  */
+
+  const onSignOut = () => {
+    auth.logout().then((res) => {
+      setIsLoggedIn(false);
+      history.push("/signin");
+    });
   };
 
   return (
@@ -292,7 +288,7 @@ const App = () => {
           onClose={closeAllPopups}
           onDeleteCard={handleDeleteCard}
           isOpen={isDeleteCardPopupOpen}
-          deleteCard={selectedCardDelete}
+          card={selectedCardDelete}
         ></DeleteCardPopup>
 
         <ImagePopup item={selectedCard} onClose={closeAllPopups} />

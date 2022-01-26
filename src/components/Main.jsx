@@ -6,6 +6,16 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 const Main = (props) => {
   const currentUser = React.useContext(CurrentUserContext);
+  const [sortedCards, setSortedCards] = React.useState([])
+
+  React.useEffect(() => {
+    const newArrCards = props.cards.sort((a, b) => {
+      let c = new Date(a.createdAt);
+      let d = new Date(b.createdAt);
+      return d - c;
+    });
+    setSortedCards(newArrCards);
+  }, [props.cards])
 
   return (
     <main>
@@ -40,7 +50,7 @@ const Main = (props) => {
       </section>
 
       <section className="elements">
-        {props.cards.map((item) => {
+        {sortedCards.map((item) => {
           return (
             <Card
               key={item._id}
