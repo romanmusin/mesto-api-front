@@ -68,7 +68,7 @@ class Api {
       method: "DELETE",
       credentials: "include",
       headers: this._headers,
-    }).then(this._getResponse);
+    }).then(this._getResponse, console.log(cardId));
   }
 
   toggleLike(cardId, isLiked) {
@@ -85,7 +85,7 @@ const api = new Api({
   ? "https://api.romus.mesto.nomoredomains.work"
   : "http://localhost:3000",
   headers: {
-    Authorization: `Bearer ${document.cookie.search('jwt').value}` ,
+    //Authorization: `Bearer ${document.cookie.search('jwt')}` ,
     "Content-Type": "application/json",
   },
 });
