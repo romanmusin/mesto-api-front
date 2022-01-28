@@ -6,16 +6,18 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 const Main = (props) => {
   const currentUser = React.useContext(CurrentUserContext);
-  const [sortedCards, setSortedCards] = React.useState([])
+  const [sortedCards, setSortedCards] = React.useState([]);
 
   React.useEffect(() => {
-    const newArrCards = props.cards.sort((a, b) => {
-      let c = new Date(a.createdAt);
-      let d = new Date(b.createdAt);
-      return d - c;
-    });
-    setSortedCards(newArrCards);
-  }, [props.cards])
+    if (props.cards) {
+      const newCardsArray = props.cards.sort((a, b) => {
+        let c = new Date(a.createdAt);
+        let d = new Date(b.createdAt);
+        return d - c;
+      });
+      setSortedCards(newCardsArray);
+    }
+  }, [props.cards]);
 
   return (
     <main>
@@ -50,11 +52,11 @@ const Main = (props) => {
       </section>
 
       <section className="elements">
-        {sortedCards.map((item) => {
+        {sortedCards.map((card) => {
           return (
             <Card
-              key={item._id}
-              item={item}
+              key={card._id}
+              item={card}
               onCardClick={props.onCardClick}
               onCardLike={props.onCardLike}
               onClickDeleteCard={props.onClickDeleteCard}

@@ -54,7 +54,7 @@ const App = () => {
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setSelectedCard(null);
-    //setSelectedCardDelete(null);
+    setSelectedCardDelete(null);
     setIsDeleteCardPopupOpen(false);
     setIsInfoTooltipOpen(false);
   };
@@ -72,18 +72,17 @@ const App = () => {
 
   //Удаление Карточки
   function handleDeleteCard() {
-    console.log(selectedCardDelete._id)
     api
       .deleteCard(selectedCardDelete._id)
       .then((res) => {
         setCards((cards) => {
-          cards.filter((cardElements) => {
-            console.log(cardElements._id);
-            return cardElements._id !== selectedCardDelete._id;
-            
-          })
+          cards.filter((cardElements) => cardElements._id !== selectedCardDelete._id)
+          closeAllPopups();
         });
-        closeAllPopups();
+        Promise.all([ api.getCardsInfo()])
+        .then(([loadCards]) => {
+          setCards(loadCards.data);
+        })
       })
       .catch((err) => console.log(err));
   }
@@ -134,6 +133,10 @@ const App = () => {
         setCurrentUser(userAvatar);
         closeAllPopups();
       })
+      Promise.all([ api.getUserInfo()])
+        .then(([userInfo]) => {
+          setCurrentUser(userInfo.data);
+        })
       .catch((err) => console.log(err));
   }
 

@@ -68,7 +68,7 @@ class Api {
       method: "DELETE",
       credentials: "include",
       headers: this._headers,
-    }).then(this._getResponse, console.log(cardId));
+    }).then(this._getResponse);
   }
 
   toggleLike(cardId, isLiked) {
